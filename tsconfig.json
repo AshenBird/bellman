@@ -1,0 +1,14 @@
+{
+  "compilerOptions": {
+    "rootDirs": ["src","scripts"]
+  },
+  "references": [
+    {
+      "path": "./tsconfig.default.json"
+    },
+    {
+      "path": "./tsconfig.script.json"
+    }
+  ],
+  
+}

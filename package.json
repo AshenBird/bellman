@@ -1,0 +1,39 @@
+{
+  "name": "@mcswift/bellman",
+  "version": "0.0.3",
+  "description": "",
+  "exports": {
+    "./ts": {
+      "import": "./src/bellman.ts",
+      "require": "./src/bellman.ts",
+      "node": "./src/bellman.ts"
+    },
+    ".":{
+      "import":"./lib/bellman.mjs",
+      "require": "./lib/bellman.js",
+      "types":"./types/bellman.d.ts"
+    },
+    "./types":"./types/bellman.d.ts"
+  },
+  "repository": {
+    "url": ""
+  },
+  "types": "./types/bellman.d.ts",
+  "scripts": {
+    "build": "tsx ./scripts/build.ts"
+  },
+  "keywords": [],
+  "author": {
+    "name": "McSwift",
+    "email": "hi@mcswift.cn"
+  },
+  "license": "MIT",
+  "devDependencies": {
+    "@types/fs-extra": "^11.0.1",
+    "@types/node": "^20.4.10",
+    "esbuild": "^0.19.1",
+    "fs-extra": "^11.1.1",
+    "tsx": "^3.12.7",
+    "typescript": "^5.1.3"
+  }
+}
