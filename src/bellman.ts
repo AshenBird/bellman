@@ -6,9 +6,32 @@ type ObserverRecord<T> = {
 }
 type Observer<T> = ObserverRecord<T> | ((val: T) => CommonVoid)
 
-class Subject<T>{
-  subscribeMap = new Map<symbol, Observer<T>>()
-  constructor() { }
+
+export class Bellman<T =void>{
+  private promise: Promise<T>
+  private value:T
+  private subscribeMap = new Map<symbol, Observer<T>>()
+  
+  get signal(){
+    return new Proxy(this.promise,{
+      get:(target,p)=>{
+        if(p==="subscribe"){
+          return this.subscribe.bind(this)
+        }
+        // @ts-ignore
+        return target[p]
+      }
+    }) 
+  }
+  constructor(val:T) {
+    this.promise = new Promise<T>((_resolve, _reject) => {
+      this.subscribe({
+        next: (val) => _resolve(val),
+        error: (err) => _reject(err)
+      })
+    })
+    this.value = val
+  }
   subscribe(observer: Observer<T>) {
     const k = Symbol()
     this.subscribeMap.set(k, observer);
@@ -34,26 +57,10 @@ class Subject<T>{
       observer.error(err);
     }
   }
-}
-
-export class Bellman<T =void>{
-  private promise: Promise<T>
-  private subject = new Subject<T>();
-  constructor() {
-    this.promise = new Promise<T>((_resolve, _reject) => {
-      this.subject.subscribe({
-        next: (val) => _resolve(val),
-        error: (err) => _reject(err)
-      })
-    })
-  }
-  get signal(){
-    return this.promise
-  }
   resolve(info: T) {
-    this.subject.next(info)
+    this.next(info)
   }
   reject(err: any) {
-    this.subject.error(err)
+    this.error(err)
   }
 }
