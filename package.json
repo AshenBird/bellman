@@ -16,7 +16,11 @@
     "./types":"./types/bellman.d.ts"
   },
   "repository": {
-    "url": ""
+    "url": "https://github.com/AshenBird/bellman.git"
+  },
+  "homepage": "https://github.com/AshenBird/bellman",
+  "bugs": {
+    "url": "https://github.com/AshenBird/bellman/issues"
   },
   "types": "./types/bellman.d.ts",
   "scripts": {
