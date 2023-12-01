@@ -9,9 +9,8 @@ type Observer<T> = ObserverRecord<T> | ((val: T) => CommonVoid)
 
 export class Bellman<T =void>{
   private promise: Promise<T>
-  private value:T
+  private value?:T = undefined
   private subscribeMap = new Map<symbol, Observer<T>>()
-  
   get signal(){
     return new Proxy(this.promise,{
       get:(target,p)=>{
@@ -21,25 +20,32 @@ export class Bellman<T =void>{
         // @ts-ignore
         return target[p]
       }
-    }) 
+    }) as Promise<T>&{subscribe:(observer: Observer<T>)=>(() => void)}
   }
-  constructor(val:T) {
+  constructor() {
     this.promise = new Promise<T>((_resolve, _reject) => {
       this.subscribe({
         next: (val) => _resolve(val),
         error: (err) => _reject(err)
       })
     })
-    this.value = val
   }
   subscribe(observer: Observer<T>) {
     const k = Symbol()
     this.subscribeMap.set(k, observer);
+    if(this.value){
+      if(typeof observer === "function"){
+        observer(this.value)
+      }else{
+        observer.next(this.value)
+      }
+    }
     return () => {
       this.subscribeMap.delete(k);
     }
   }
   next(val: T) {
+    this.value = val
     for (const [k, observer] of this.subscribeMap) {
       if (typeof observer === "function") {
         observer(val);
