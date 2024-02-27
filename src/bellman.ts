@@ -18,7 +18,7 @@ export class Bellman<T =void>{
         if(p==="subscribe"){
           return _.subscribe.bind(_)
         }
-        return Reflect.get(target,p).bind(_)
+        return Reflect.get(target,p).bind(target)
       }
     }) as Promise<T>&{subscribe:(observer: Observer<T>)=>(() => void)}
   }
