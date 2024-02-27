@@ -12,13 +12,13 @@ export class Bellman<T =void>{
   private value?:T = undefined
   private subscribeMap = new Map<symbol, Observer<T>>()
   get signal(){
+    const _ = this
     return new Proxy(this.promise,{
       get:(target,p)=>{
         if(p==="subscribe"){
-          return this.subscribe.bind(this)
+          return _.subscribe.bind(_)
         }
-        // @ts-ignore
-        return target[p]
+        return Reflect.get(target,p).bind(_)
       }
     }) as Promise<T>&{subscribe:(observer: Observer<T>)=>(() => void)}
   }
