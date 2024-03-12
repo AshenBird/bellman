@@ -8,8 +8,10 @@ export declare class Bellman<T = void> {
     private promise;
     private value?;
     private subscribeMap;
+    private _status;
+    get status(): "padding" | "success" | "fail";
     get signal(): Promise<T> & {
-        subscribe: (observer: Observer<T>) => (() => void);
+        subscribe: (observer: Observer<T>) => () => void;
     };
     constructor();
     subscribe(observer: Observer<T>): () => void;
